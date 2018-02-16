@@ -42,6 +42,12 @@ if awesome.startup_errors then
                      text = awesome.startup_errors })
 end
 
+local audit = [[arch-audit -u]]
+
+awful.spawn.easy_async(audit, function(stdout, stderr, reason, exit_code)
+      if stdout then naughty.notify { preset = naughty.config.presets.critical, text = stdout } end
+end)
+
 do
     local in_error = false
     awesome.connect_signal("debug::error", function (err)
@@ -177,7 +183,7 @@ lain.widgets.calendar.attach(mytextclock, { font_size = 10 })
 -- Weather
 local weathericon = wibox.widget.imagebox(beautiful.widget_weather)
 local myweather = lain.widgets.weather({
-    city_id = 2643743, -- placeholder
+    city_id = 2643741, -- placeholder
     weather_na_markup = markup("#eca4c4", "N/A "),
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
@@ -244,7 +250,7 @@ local batwidget = lain.widgets.bat({
            status = bat_now.perc .. "%"
         end
         if bat_now.ac_status == 1 then
-           status = bat_now.perc .. " plug"
+           status = "⚡" .. bat_now.perc .. "%"
         end
 
         widget:set_text(status .. " ")
@@ -443,8 +449,8 @@ awful.screen.connect_for_each_screen(function(s)
             cpuwidget,
             -- fsicon,
             -- fsroot,
-            weathericon,
-            myweather,
+            -- weathericon,
+            -- myweather,
             tempicon,
             tempwidget,
             baticon,
@@ -542,13 +548,13 @@ globalkeys = awful.util.table.join(
               {description = "show main menu", group = "awesome"}),
 
     -- Layout manipulation
-    awful.key({ modkey, "Shift"   }, "j", function () awful.client.swap.byidx(  1)    end,
+    awful.key({ modkey, "Control"   }, "j", function () awful.client.swap.byidx(  1)    end,
               {description = "swap with next client by index", group = "client"}),
-    awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
+    awful.key({ modkey, "Control"   }, "k", function () awful.client.swap.byidx( -1)    end,
               {description = "swap with previous client by index", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey, "Shift" }, "j", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey, "Shift" }, "k", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
@@ -709,10 +715,10 @@ globalkeys = awful.util.table.join(
                     history_path = awful.util.get_cache_dir() .. "/history_eval"
                   }
               end,
-              {description = "lua execute prompt", group = "awesome"}),
+              {description = "lua execute prompt", group = "awesome"})
     -- Menubar
-    awful.key({ modkey }, "p", function() menubar.show() end,
-              {description = "show the menubar", group = "launcher"})
+    -- awful.key({ modkey }, "p", function() menubar.show() end,
+    --           {description = "show the menubar", group = "launcher"})
     --]]
 
     --[[ dmenu

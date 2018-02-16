@@ -10,7 +10,9 @@
 local theme                                     = {}
 
 theme.confdir                                   = os.getenv("HOME") .. "/.config/awesome/themes/multicolor"
-theme.wallpaper                                 = theme.confdir .. "/wall.png"
+-- theme.wallpaper                                 = theme.confdir .. "/wall.png"
+local f          = io.popen("sh -c \"find ~/Wallpapers/4K -type f -name '*' | tail -n +2 | shuf -n 1 | xargs echo -n\"")
+theme.wallpaper = f:read("*all")
 
 theme.font                                      = "Terminus 8"
 theme.menu_bg_normal                            = "#000000"
