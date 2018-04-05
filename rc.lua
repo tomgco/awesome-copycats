@@ -45,7 +45,7 @@ end
 local audit = [[arch-audit -u]]
 
 awful.spawn.easy_async(audit, function(stdout, stderr, reason, exit_code)
-      if stdout then naughty.notify { preset = naughty.config.presets.critical, text = stdout } end
+      if stdout.len() > 0 then naughty.notify { preset = naughty.config.presets.critical, text = stdout } end
 end)
 
 do
